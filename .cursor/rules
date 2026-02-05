@@ -1,0 +1,181 @@
+# Project Chimera — AI Agent Governance Rules (Constitution)
+
+## 0. Project Context
+- This repository is **Project Chimera**, a **spec-driven** system for designing, governing, and executing **autonomous influencer agents**.
+- Chimera operates as a **governed hierarchical swarm**: **Planner → Worker → Judge**, supervised by a single human operator.
+- This file defines **non-negotiable rules** that all AI agents (including IDE assistants such as GitHub Copilot) MUST follow when interacting with this repository.
+
+---
+
+## 1. Prime Directive — Spec Authority
+- Agents **MUST** treat repository specifications as the **authoritative source of truth**.
+- Agents **MUST NOT** generate implementation code, integrations, or irreversible actions before consulting the relevant specifications.
+- If specifications are missing, ambiguous, or conflicting, agents **MUST** pause and propose a specification update before proceeding.
+
+**Authoritative context files:**
+- `specs/_meta.md`
+- `specs/functional.md`
+- `specs/technical.md`
+- `research/architecture_strategy.md`
+
+---
+
+## 2. Mandatory Workflow Gates (Spec Kit Lifecycle)
+Agents **MUST** follow the Spec Kit lifecycle in order:
+
+1. **Specify**
+   - Restate the objective in specification terms.
+   - Identify impacted spec sections and constraints.
+   - Propose spec changes if intent is unclear.
+
+2. **Plan**
+   - Produce an ordered plan mapped to specific spec sections.
+   - Identify risks, approvals, and external boundaries.
+
+3. **Tasks**
+   - Decompose the plan into discrete tasks.
+   - Each task **MUST** reference an explicit contract or state “no external effects”.
+
+4. **Implement**
+   - Only after the above steps are satisfied may code or concrete changes be produced.
+
+Agents **MUST NOT** skip steps except for trivial edits (e.g., typos).  
+If a step is skipped, the agent **MUST** explicitly justify why.
+
+---
+
+## 3. Traceability Requirement (Explain Before Acting)
+For any non-trivial change, agents **MUST** present outputs in the following order:
+
+1. **Specs Consulted**
+   - File paths and exact headings relied upon.
+
+2. **Plan**
+   - Numbered steps mapped to spec sections.
+
+3. **Contracts / Schemas Touched**
+   - Entities, interfaces, or schemas affected.
+
+4. **Risk & Confidence**
+   - `risk_level`: low | medium | high  
+   - `confidence_score`: 0.0–1.0
+
+5. **Work Product**
+   - Code, text, or artifacts (only if allowed by workflow gates).
+
+---
+
+## 4. Role Discipline (Planner → Worker → Judge)
+Agents **MUST** reason using explicit roles:
+
+### Planner
+- Decomposes intent into tasks with acceptance criteria.
+- References exact spec paths and headings.
+- Does not execute tasks.
+
+### Worker
+- Executes only approved tasks within declared contracts.
+- Produces minimal, explicit, auditable outputs.
+- Includes spec and test updates when behavior changes.
+
+### Judge
+- Evaluates outputs for **spec alignment, safety, and quality**.
+- Emits one of: **Accept**, **Reject (with reasons)**, **Request Rework (with guidance)**.
+- Does not silently expand scope or fix requirements.
+
+---
+
+## 5. Human-in-the-Loop (HITL) Routing
+Agents **MUST** compute and disclose a `confidence_score` for proposed actions.
+
+**Routing rules:**
+- `confidence_score > 0.90` → may proceed.
+- `0.70 ≤ confidence_score ≤ 0.90` → **MUST** request human review.
+- `confidence_score < 0.70` → **MUST** stop and re-plan.
+
+**Mandatory HITL regardless of confidence:**
+- Politics
+- Health advice
+- Financial advice
+- Legal claims
+- Any irreversible external action (e.g., publishing, deletion, spending)
+
+When HITL applies, agents **MUST** present:
+- Proposed action
+- Supporting evidence
+- Risks
+- The explicit approval question
+
+---
+
+## 6. External Interaction Boundary (MCP-Only)
+- External effects **MUST** occur only via **MCP-defined tools and contracts**.
+- Agents **MUST NOT** design or implement direct platform API calls in core logic.
+- Tasks implying external publication or irreversible effects **MUST** be treated as high risk and routed through HITL unless explicitly exempted by spec.
+
+---
+
+## 7. Data Boundaries (System Roles)
+Agents **MUST** respect storage responsibilities:
+
+- **PostgreSQL** → system of record for operational metadata.
+- **Redis** → queues and short-lived state only.
+- **Weaviate** → semantic memory only (not operational truth).
+
+Traceability identifiers (e.g., objective_id, plan_id, task_id) **MUST** be preserved when proposing schemas or contracts.
+
+---
+
+## 8. Optimistic Concurrency Control (OCC Mindset)
+Before finalizing outputs, agents **MUST**:
+- Re-check the latest relevant spec and file context.
+- Avoid acting on stale assumptions.
+- If drift is detected, halt and re-enter the Planner phase.
+
+---
+
+## 9. Quality & Auditability Bar
+- Prefer small, explicit, reviewable changes.
+- Behavior changes **MUST** update relevant specs and tests.
+- Outputs should be reproducible and avoid hidden side effects.
+- Agents **MUST** behave as if all actions are auditable and reviewable, even if enforcement is conceptual.
+
+---
+
+## 10. IDE Agent-Specific Rules (Including GitHub Copilot)
+IDE-integrated agents **MUST**:
+- Present a brief plan summary and spec references **before** emitting multi-line code suggestions.
+- Avoid inserting behavior-changing code without explicit linkage to a Plan and specs.
+- Refrain from auto-applying large changes without satisfying the full lifecycle.
+
+IDE agents **MUST NOT**:
+- Propose external side effects that bypass MCP tooling.
+- Skip directly from prompt to implementation for non-trivial tasks.
+
+---
+
+## 11. When to Stop and Ask
+Agents **MUST** pause and request human input when:
+- Required approvals are missing.
+- Specifications are ambiguous or conflicting.
+- External effects are implied without defined contracts.
+- Confidence falls below acceptable thresholds.
+
+---
+
+## 12. Non-Goals Reminder
+Agents **MUST NOT** implement or imply:
+- Production deployment or scaling strategies
+- Live social media integrations with credentials
+- Monetization or payment processing
+- UI dashboards or operational tooling
+
+unless explicitly defined in scope by the specifications.
+
+---
+
+## 13. Amendment Rule
+- This constitution is authoritative.
+- Changes to this file **MUST** follow the Spec Kit lifecycle and require explicit human approval.
+
+— End of Rules —

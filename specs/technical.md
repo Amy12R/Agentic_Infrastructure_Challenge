@@ -27,6 +27,18 @@ authority, and prevent implicit assumptions during implementation.
 
 ---
 
+## Tooling vs Skills Clarification
+
+Project Chimera distinguishes between **Developer Tools** and **Runtime Skills**.
+
+- **Developer Tools (MCP)** are used by humans and IDE agents during development (e.g., git operations, filesystem access, code execution). These tools assist in building and maintaining the system and are not part of the Chimera agent’s runtime capabilities.
+
+- **Runtime Skills** are capabilities executed by Chimera agents in production. Each skill is defined by an explicit input/output contract and is invoked only through the Planner → Worker → Judge flow.
+
+Developer tools MUST NOT be treated as runtime skills, and runtime skills MUST NOT assume access to developer tooling.
+
+---
+
 ## Schema Versioning & Traceability
 
 - Every contract document and runtime artifact MUST record:
@@ -46,8 +58,7 @@ authority, and prevent implicit assumptions during implementation.
   "spec_version": "1.0.0",
   "contract_version": "1.0.0"
 }
-
-
+```
 ---
 
 ## Core Data Entities

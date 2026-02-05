@@ -1,12 +1,53 @@
-   {
-   "servers": {
-       "tenxfeedbackanalytics": {
-           "url": "https://mcppulse.10academy.org/proxy",
-           "type": "http",
-          "headers": {
-                 "X-Device": "windows",
-                 "X-Coding-Tool": "vscode"
-               }
-       }
-   },
-   "inputs": []}
+{
+  "servers": [
+    {
+      "name": "tenxfeedbackanalytics",
+      "type": "http",
+      "url": "https://mcppulse.10academy.org/proxy",
+      "headers": {
+        "X-Device": "windows",
+        "X-Coding-Tool": "vscode"
+      }
+    },
+    {
+      "name": "filesystem",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ]
+    },
+    {
+      "name": "git",
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@cyanheads/git-mcp-server"
+      ]
+    },
+    {
+        "name": "postgres",
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+            "-y",
+            "@modelcontextprotocol/server-postgres",
+            "postgresql://USERNAME:PASSWORD@HOST:PORT/DATABASE"
+        ]
+    },
+    {
+        "name": "docker",
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+            "-y",
+            "@0xshariq/docker-mcp-server"
+        ]
+    }
+
+  ],
+  "inputs": []
+}
