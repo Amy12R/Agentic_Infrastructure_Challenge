@@ -1,7 +1,16 @@
 [project]
 name = "agentic-infrastructure-challenge"
 version = "0.1.0"
-description = "Add your description here"
+description = "Project Chimera — spec-driven autonomous influencer factory"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.11"
 dependencies = []
+
+[dependency-groups]
+dev = [
+  "pytest>=8",
+  "ruff>=0.6",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
