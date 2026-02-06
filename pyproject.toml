@@ -3,7 +3,7 @@ name = "agentic-infrastructure-challenge"
 version = "0.1.0"
 description = "Project Chimera — spec-driven autonomous influencer factory"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = []
 
 [dependency-groups]

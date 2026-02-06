@@ -1,0 +1,37 @@
+version: 1
+
+reviews:
+  auto_review:
+    enabled: true
+
+    rules:
+      - name: Spec Alignment
+        description: >
+          All code changes MUST align with the authoritative specifications
+          under the specs/ directory. If implementation behavior cannot be
+          traced back to a spec requirement, flag it.
+
+      - name: No Spec Drift
+        description: >
+          Do not allow new behavior, logic, or side effects that are not
+          explicitly described in specs/_meta.md, specs/functional.md,
+          or specs/technical.md.
+
+      - name: Contract First
+        description: >
+          Ensure all functions, skills, and interfaces respect declared
+          input/output contracts and schemas. Flag implicit assumptions.
+
+      - name: Security & Safety
+        description: >
+          Check for unsafe defaults, missing validation, unchecked external
+          calls, or logic that could bypass human-in-the-loop requirements.
+
+      - name: No Vibe Coding
+        description: >
+          Reject code that appears improvised, heuristic, or stylistic without
+          explicit grounding in the specification.
+
+comments:
+  enabled: true
+  severity_threshold: medium
