@@ -5,7 +5,7 @@ IMAGE_NAME := chimera-dev
 setup:
 	@docker build -t $(IMAGE_NAME) .
 
-test:
+test: setup
 	@docker run --rm $(IMAGE_NAME) pytest -q
 
 spec-check:
