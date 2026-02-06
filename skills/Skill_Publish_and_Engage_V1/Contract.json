@@ -1,0 +1,55 @@
+{
+  "id": "skill_publish_and_engage_v1",
+  "name": "publish_and_engage",
+  "description": "Publish approved content and perform controlled engagement actions. High-risk: external impact.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "platform": { "type": "string", "enum": ["x", "instagram", "tiktok", "youtube"] },
+      "action": { "type": "string", "enum": ["publish", "reply", "like", "follow"] },
+      "content": {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string" },
+          "media_asset_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "target": {
+        "type": "object",
+        "properties": {
+          "post_id": { "type": "string" },
+          "user_id": { "type": "string" }
+        }
+      },
+      "interface_contract_id": { "type": "string" }
+    },
+    "required": ["platform", "action", "interface_contract_id"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "spec_version": { "type": "string" },
+      "contract_version": { "type": "string" },
+      "result": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "enum": ["queued", "sent", "failed"] },
+          "platform_reference_id": { "type": "string" },
+          "timestamp": { "type": "string" }
+        },
+        "required": ["status"]
+      }
+    },
+    "required": ["spec_version", "contract_version", "result"]
+  },
+  "failure_modes": [
+    { "code": "MISSING_APPROVAL", "description": "Action requires HITL approval but none exists.", "retryable": false },
+    { "code": "INTERFACE_CONTRACT_MISSING", "description": "No approved interface contract provided.", "retryable": false },
+    { "code": "UPSTREAM_ERROR", "description": "Platform integration failed.", "retryable": true },
+    { "code": "INVALID_INPUT", "description": "Input schema validation failed.", "retryable": false }
+  ],
+  "version": "1.0.0",
+  "spec_version": "1.0.0",
+  "created_at": "2026-02-06T00:00:00Z",
+  "owner_id": "system"
+}

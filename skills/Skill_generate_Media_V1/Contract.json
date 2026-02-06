@@ -1,0 +1,45 @@
+{
+  "id": "skill_generate_media_v1",
+  "name": "generate_media",
+  "description": "Generate or request media artifacts (image/video script/storyboard) and return metadata references.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "media_type": { "type": "string", "enum": ["image", "video"] },
+      "prompt": { "type": "string" },
+      "style_hints": { "type": "array", "items": { "type": "string" } },
+      "duration_seconds": { "type": "number" },
+      "aspect_ratio": { "type": "string" }
+    },
+    "required": ["media_type", "prompt"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "spec_version": { "type": "string" },
+      "contract_version": { "type": "string" },
+      "assets": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "asset_id": { "type": "string" },
+            "asset_type": { "type": "string", "enum": ["image", "video", "script", "storyboard"] },
+            "uri": { "type": "string" },
+            "notes": { "type": "string" }
+          },
+          "required": ["asset_id", "asset_type"]
+        }
+      }
+    },
+    "required": ["spec_version", "contract_version", "assets"]
+  },
+  "failure_modes": [
+    { "code": "UPSTREAM_ERROR", "description": "Media generator failed or timed out.", "retryable": true },
+    { "code": "INVALID_INPUT", "description": "Input schema validation failed.", "retryable": false }
+  ],
+  "version": "1.0.0",
+  "spec_version": "1.0.0",
+  "created_at": "2026-02-06T00:00:00Z",
+  "owner_id": "system"
+}

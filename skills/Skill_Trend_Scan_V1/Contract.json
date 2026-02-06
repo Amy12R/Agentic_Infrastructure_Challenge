@@ -1,0 +1,60 @@
+{
+  "id": "skill_trend_scan_v1",
+  "name": "trend_scan",
+  "description": "Return a curated list of trending topics with supporting sources and confidence signals.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "seed_topics": { "type": "array", "items": { "type": "string" } },
+      "platforms": {
+        "type": "array",
+        "items": { "type": "string", "enum": ["web", "news", "x", "instagram", "tiktok", "youtube"] }
+      },
+      "region": { "type": "string" },
+      "language": { "type": "string" },
+      "max_results": { "type": "number" }
+    },
+    "required": ["platforms", "max_results"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "spec_version": { "type": "string" },
+      "contract_version": { "type": "string" },
+      "topics": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "topic": { "type": "string" },
+            "hook": { "type": "string" },
+            "rationale": { "type": "string" },
+            "sources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "url": { "type": "string" }
+                },
+                "required": ["title", "url"]
+              }
+            },
+            "confidence": { "type": "number" }
+          },
+          "required": ["topic", "sources", "confidence"]
+        }
+      }
+    },
+    "required": ["spec_version", "contract_version", "topics"]
+  },
+  "failure_modes": [
+    { "code": "NO_RESULTS", "description": "No trends found for the requested filters.", "retryable": true },
+    { "code": "UPSTREAM_ERROR", "description": "A required upstream provider failed.", "retryable": true },
+    { "code": "INVALID_INPUT", "description": "Input schema validation failed.", "retryable": false }
+  ],
+  "version": "1.0.0",
+  "spec_version": "1.0.0",
+  "created_at": "2026-02-06T00:00:00Z",
+  "owner_id": "system"
+}

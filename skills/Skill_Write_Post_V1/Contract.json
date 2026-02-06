@@ -1,0 +1,53 @@
+{
+  "id": "skill_write_post_v1",
+  "name": "write_post",
+  "description": "Generate platform-ready text content from a topic, constraints, and tone guidance.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "topic": { "type": "string" },
+      "platform": { "type": "string", "enum": ["x", "instagram", "tiktok", "youtube"] },
+      "tone": { "type": "string" },
+      "constraints": {
+        "type": "object",
+        "properties": {
+          "do_not_include": { "type": "array", "items": { "type": "string" } },
+          "required_points": { "type": "array", "items": { "type": "string" } },
+          "max_length": { "type": "number" }
+        }
+      },
+      "variants": { "type": "number" }
+    },
+    "required": ["topic", "platform", "variants"]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "spec_version": { "type": "string" },
+      "contract_version": { "type": "string" },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" },
+            "hashtags": { "type": "array", "items": { "type": "string" } },
+            "cta": { "type": "string" },
+            "safety_notes": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["text"]
+        }
+      }
+    },
+    "required": ["spec_version", "contract_version", "items"]
+  },
+  "failure_modes": [
+    { "code": "POLICY_CONFLICT", "description": "Requested constraints conflict with safety rules.", "retryable": false },
+    { "code": "INVALID_INPUT", "description": "Input schema validation failed.", "retryable": false },
+    { "code": "GENERATION_ERROR", "description": "Content generation failed unexpectedly.", "retryable": true }
+  ],
+  "version": "1.0.0",
+  "spec_version": "1.0.0",
+  "created_at": "2026-02-06T00:00:00Z",
+  "owner_id": "system"
+}

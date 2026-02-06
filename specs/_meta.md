@@ -1,76 +1,110 @@
 # Project Chimera — Specification Meta
 
-## Summary
-Project Chimera is a spec-driven system for designing, governing, and executing autonomous influencer agents. The system emphasizes clear intent, strict contracts, and human oversight to enable safe, scalable autonomy.
+## System Intent
+
+Project Chimera is a specification-driven system for designing, governing, and executing autonomous influencer agents operating as a hierarchical swarm (Planner → Worker → Judge), supervised by a single Human Operator.
+
+The system exists to eliminate ambiguity, prevent uncontrolled autonomy, and ensure that all actions with internal or external effects are governed by explicit specifications, contracts, and human oversight.
+
+---
 
 ## Problem Statement
-Autonomous AI systems commonly fail as scale and autonomy increase due to unclear intent, informal or implicit contracts, and insufficient governance boundaries. These conditions result in inconsistent agent behavior, unsafe external interactions, and systems that are difficult to reason about or maintain.
 
-Project Chimera addresses this by treating specifications as the authoritative source of system intent, explicitly separating intent from implementation, and requiring that all external interactions occur through controlled, contract-defined interfaces.
+Autonomous agents that operate without precise contractual boundaries or enforceable governance rules tend to produce unsafe, untraceable, or undesirable outcomes. Ambiguity in intent, implicit assumptions, and unbounded autonomy make such systems difficult to reason about, audit, or correct.
 
+Project Chimera addresses this problem by treating specifications as authoritative system contracts, enforcing role separation, and requiring explicit approvals and traceability for all meaningful decisions and effects.
+
+---
 
 ## Goals
-- Define a clear, machine-readable specification that serves as the authoritative source of system intent.
-- Constrain agent autonomy to execution within explicitly defined roles, skills, and contracts.
-- Ensure all agent behavior is derived from specifications rather than inferred or improvised.
-- Require human-in-the-loop approval for actions with external, irreversible, or high-impact effects.
-- Establish a repository structure that enables AI-assisted implementation without ambiguity or scope expansion.
+
+- Define authoritative, machine-readable specifications that serve as the single source of truth for system behavior.
+- Enforce strict separation of responsibilities between Planner, Worker, and Judge roles.
+- Require explicit human approval for high-risk, irreversible, or externally visible actions.
+- Ensure end-to-end traceability for objectives, plans, tasks, evaluations, approvals, and executions.
+- Constrain all external interactions to contract-defined interfaces.
+
+---
 
 ## Non-Goals
-- Implementing or operating a production-ready influencer system or runtime.
-- Creating user interfaces, dashboards, or UI-facing APIs.
-- Designing or optimizing for production-scale performance, cost, or throughput.
-- Integrating real financial systems, live credentials, or external accounts.
-- Defining or enforcing content strategy, branding, or stylistic guidance.
 
+Project Chimera does NOT:
+- Specify implementation details, algorithms, libraries, frameworks, or programming languages.
+- Define infrastructure, deployment topology, runtime environments, or scaling strategies.
+- Provide authentication, authorization, transport protocols, or UI designs.
+- Operate live social media accounts or manage real credentials.
+- Define content strategy, branding, or stylistic guidance.
 
-## Core Principles
-- **Spec Authority**: Specifications define system behavior and constraints.
-- **Contract First**: All interactions use explicit input/output contracts.
-- **Separation of Concerns**: Planning, execution, and evaluation are distinct roles.
-- **Controlled Autonomy**: External effects occur only through approved interfaces.
-- **Human Oversight**: Publishing and other high-risk actions require review.
+---
 
-## System Scope
+## Scope
 
-### In Scope (This Repository)
-- High-level system specification and constraints.
-- Functional descriptions of agent behavior.
-- Technical contracts for agent inputs, outputs, and data storage.
-- Skill interface definitions (structure only).
-- Test definitions that assert spec compliance.
-- Tooling and automation for reproducible development.
+This repository governs the **specification-level definition** of Project Chimera, including:
 
-### Out of Scope (Deferred)
-- Full skill implementations.
-- Live social media integrations.
-- UI/UX and operational dashboards.
-- Production deployment and scaling strategy.
-- Monetization logic and payment processing.
+- System intent, constraints, and invariants.
+- Conceptual behaviors and workflows of agents and humans.
+- Abstract data models, schemas, and interface contracts.
+- Traceability, versioning, and audit requirements.
+- Testable acceptance criteria derived from specifications.
 
-## Key Actors
-- **Human Operator**: Oversees system behavior and approves high-risk actions.
-- **Central Orchestrator**: Coordinates goals, state, and agent activity.
-- **Planner Agent**: Decomposes objectives into executable tasks.
-- **Worker Agents**: Execute tasks using defined skills.
-- **Judge Agent**: Evaluates outputs for quality, safety, and compliance.
+Out of scope:
+- Concrete implementations of skills or tools.
+- Runtime infrastructure and operational services.
+- Developer tooling behavior beyond contract definitions and traceability surfaces.
 
-## Definitions
-- **Agent**: An autonomous process operating under defined roles and constraints.
-- **Skill**: A reusable capability with explicit input and output contracts.
-- **Tool**: An external system accessed via an MCP interface.
-- **Telemetry**: Structured logs and traces of agent decisions and actions.
-- **HITL (Human-in-the-Loop)**: A required human approval step for certain actions.
+---
 
-## Constraints
-- Specifications MUST be consulted before implementation.
-- External systems MUST be accessed only through MCP-defined tools.
-- Skills MUST declare explicit input and output schemas.
-- Tests MUST assert compliance with specifications, not implementation details.
-- Ambiguous behavior MUST be resolved at the specification level.
+## Governing Artifacts
 
-## Relationship to Other Specs
-- `functional.md` defines user-facing and agent-facing behaviors.
-- `technical.md` defines data schemas, contracts, and storage models.
-- Optional integration specs define interaction with agent social networks.
+Project Chimera explicitly governs the following artifact types, which form the canonical system model:
 
+- **Objective** — Human-authored high-level intent.
+- **Plan** — Ordered decomposition of an Objective.
+- **Task** — Smallest executable unit with explicit schemas and risk metadata.
+- **SkillContract** — Declarative interface for a reusable capability.
+- **SkillInvocation** — Execution record of a SkillContract for a Task.
+- **Judgment** — Evaluation artifact produced by a Judge.
+- **Approval** — Human authorization record for gated actions.
+- **Telemetry** — Append-only records for traceability and audit.
+
+All governed artifacts MUST record the active `spec_version` and relevant `contract_version`.
+
+---
+
+## Primary Actors
+
+- **Human Operator** — Supervisory authority and final approver for gated actions and amendments.
+- **Planner Agent** — Produces Plans from Objectives; MUST NOT execute tasks.
+- **Worker Agent** — Executes approved Tasks according to SkillContracts.
+- **Judge Agent** — Evaluates artifacts and issues Judgments that gate further action.
+- **Skill Providers** — Implement SkillContracts (human-operated or automated systems).
+
+---
+
+## Core Constraints & Principles
+
+- **Specification Authority**  
+  Specifications in this repository are the single source of truth. No implementation, execution, or evaluation may contradict them.
+
+- **Contract-First Execution**  
+  All external effects MUST occur via explicit SkillContracts and approved interfaces.
+
+- **Human-in-the-Loop Governance**  
+  High-risk or irreversible actions are non-bypassably gated by human Approval.
+
+- **Role Separation**  
+  Planner, Worker, and Judge responsibilities are mutually exclusive for the same artifact.
+
+- **Traceability & Auditability**  
+  Every decision and action MUST be attributable to an artifact, actor, and governing specification version.
+
+- **Ambiguity Resolution**  
+  If a required behavior is ambiguous or undefined, execution MUST pause until the specification is amended or an explicit human decision is recorded.
+
+---
+
+## Relationship to Other Specifications
+
+- `specs/functional.md` defines observable behaviors, workflows, and acceptance criteria.
+- `specs/technical.md` defines abstract data models, schemas, contracts, invariants, and versioning rules.
+- The Project Chimera Constitution defines non-negotiable governance rules that supersede all specifications.
